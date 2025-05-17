@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>mg.ando.codage</groupId>
+    <artifactId>parent-project</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    
+    <modules>
+        <module>core</module>
+        <module>sardinas-patterson</module>
+        <module>core</module>
+        <module>steganographie</module>
+        <module>api-gateway</module>
+        <module>console</module>
+    </modules>
+
+    <properties>
+        <!-- Java LTS 21 (GA 19 septembre 2023) -->
+        <java.version>21</java.version>
+        
+        <!-- Spring Boot 3.4.5 (dernier artefact signalé sur Maven Central) -->
+        <spring-boot.version>3.4.5</spring-boot.version>
+        
+        <!-- Spring Cloud 2022.0.5 « Kilburn » (GA 30 janvier 2024) -->
+        <spring-cloud.version>2022.0.5</spring-cloud.version>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
