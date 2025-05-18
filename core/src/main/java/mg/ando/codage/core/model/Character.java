@@ -1,8 +1,10 @@
 package mg.ando.codage.core.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class Character {
     
     private final char value;
@@ -20,5 +22,15 @@ public class Character {
     @Override
     public int hashCode() {
         return 31 * value + code.hashCode();
+    }
+
+    public Character(char character, String code) {
+        this.value=character;
+        this.code=new BinaryCode(code);
+    }
+
+    @Override
+    public String toString() {
+        return value+"";
     }
 }

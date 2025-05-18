@@ -46,6 +46,13 @@ public class Alphabet {
             .findFirst()
             .orElse(null);
     }
+    public BinaryCode getBinaryCodeByChar(char value) {
+        return characters.stream()
+            .filter(c -> c.getValue() == value)
+            .map(c -> c.getCode())
+            .findFirst()
+            .orElse(null);
+    }
     public void printInfo() {
         System.out.println("Alphabet: " + name);
         System.out.println("Caractères:");
@@ -56,7 +63,7 @@ public class Alphabet {
             int longueur = codeValue.length();
 
             // Affichage du caractère
-            System.out.println("  - " + character.getValue() + ": " + codeValue);
+            System.out.println("  - " + character + ": " + codeValue);
 
             // Comptage des longueurs
             longueurOccurrences.put(longueur, longueurOccurrences.getOrDefault(longueur, 0) + 1);
@@ -69,7 +76,7 @@ public class Alphabet {
         for (Map.Entry<Integer, Integer> entry : longueurOccurrences.entrySet()) {
             System.out.print(entry.getKey() + " " + entry.getValue() + ", ");
         }
-        System.out.println(); // pour la ligne suivante
+        System.out.println(); 
     }
 
 }

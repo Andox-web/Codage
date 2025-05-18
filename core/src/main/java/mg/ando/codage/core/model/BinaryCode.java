@@ -17,4 +17,9 @@ public class BinaryCode {
     public int length() {
         return value.length();
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }

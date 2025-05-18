@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>mg.ando.codage</groupId>
-    <artifactId>console</artifactId>
+    <artifactId>huffman</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -18,29 +18,15 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
     <dependencies>
-        <!-- Dépendance vers le module Sardinas -->
-        <dependency>
-            <groupId>mg.ando.codage</groupId>
-            <artifactId>sardinas-patterson</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!-- Dépendance vers le module Core -->
         <dependency>
             <groupId>mg.ando.codage</groupId>
             <artifactId>core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- Dépendance vers le module huffman-->
-        <dependency>
-            <groupId>mg.ando.codage</groupId>
-            <artifactId>huffman</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <!-- Spring Boot (sans serveur web) -->
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -49,7 +35,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>mg.ando.codage.console.ConsoleApplication</mainClass>
+                    <mainClass>mg.ando.codage.huffman.HuffmanApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
