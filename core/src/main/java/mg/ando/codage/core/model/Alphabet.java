@@ -1,7 +1,9 @@
 package mg.ando.codage.core.model;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import jakarta.validation.constraints.NotBlank;
@@ -44,4 +46,30 @@ public class Alphabet {
             .findFirst()
             .orElse(null);
     }
+    public void printInfo() {
+        System.out.println("Alphabet: " + name);
+        System.out.println("Caractères:");
+        Map<Integer, Integer> longueurOccurrences = new HashMap<>();
+
+        for (Character character : characters) {
+            String codeValue = character.getCode().getValue();
+            int longueur = codeValue.length();
+
+            // Affichage du caractère
+            System.out.println("  - " + character.getValue() + ": " + codeValue);
+
+            // Comptage des longueurs
+            longueurOccurrences.put(longueur, longueurOccurrences.getOrDefault(longueur, 0) + 1);
+        }
+
+        System.out.println("Nombre de caractères: " + characters.size());
+
+        // Affichage du résumé des longueurs
+        System.out.print("Longueur des codes: ");
+        for (Map.Entry<Integer, Integer> entry : longueurOccurrences.entrySet()) {
+            System.out.print(entry.getKey() + " " + entry.getValue() + ", ");
+        }
+        System.out.println(); // pour la ligne suivante
+    }
+
 }
