@@ -27,7 +27,7 @@ public class Sequence implements Iterable<Integer> {
                 if (nMax == null) {
                     return true;
                 }
-                return currentIndex <= nMax;
+                return currentIndex < nMax;
             }
 
             @Override
@@ -49,7 +49,7 @@ public class Sequence implements Iterable<Integer> {
         this.mod = requiredSize;
     }
     public int get(int index) {
-        if (index < 0 || index > nMax) {
+        if (index < 0 || index >= nMax) {
             throw new IndexOutOfBoundsException("Index out of bounds: " + index);
         }
         int term = firstTerm;

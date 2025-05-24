@@ -102,18 +102,23 @@ public class ConsoleApplication {
         
         try {
             // 1. Préparation
-            String secretMessage = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\r\n" ;
+            String secretMessage = """ 
+                                Laa shay'a waqi'un moutlaq bale kouloun moumkine \n
+                                Where other men blindly follow the truth, remember: nothing is true.\n
+                                Where other men are limited by morality or law, remember: everything is permitted.
+                                        """; ;
             EncodeResponse encodeResponse =  huffmanService.encode(secretMessage);
             Alphabet alphabet = encodeResponse.getAlphabet();
             int length =  encodeResponse.getEncodedString().length();
+
+            System.out.println(length);
+            alphabet.printInfo();
             
-            // alphabet.printInfo();
-            
-            Sequence sequence = new Sequence(0, 1, 1, Integer.MAX_VALUE, length*length,0);
+            Sequence sequence = new Sequence(0, 5, 1, Integer.MAX_VALUE, length,0);
             BufferedImage image = steganoService.encode(secretMessage, alphabet, sequence);
 
             // 3. Décodage
-            Sequence decodeSequence = new Sequence(0, 1, 1, length,length*length,0);
+            Sequence decodeSequence = new Sequence(0, 5, 1, length,length,0);
             
             String decoded = steganoService.decode(image, alphabet, decodeSequence);
             ImageUtils.saveAsPng(image, "image-decoded.png");

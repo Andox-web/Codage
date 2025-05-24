@@ -1,12 +1,16 @@
 package mg.ando.codage.steganographie.util;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 public class ImageUtils {
 
@@ -69,8 +73,12 @@ public class ImageUtils {
     }
     
     public static BufferedImage createImageFromMapAutoSize(Map<Integer, Integer> dataMap, int requiredSize) {
-        int width = (int) Math.ceil(Math.sqrt(requiredSize));
-        int height = (int) Math.ceil((double) requiredSize / width);
+        int maxIndex = Math.max(
+            requiredSize,
+            dataMap.keySet().stream().max(Integer::compareTo).orElse(0) + 1
+        );
+        int width = (int) Math.ceil(Math.sqrt(maxIndex));
+        int height = (int) Math.ceil((double) maxIndex / width);
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Random random = new Random();
@@ -97,7 +105,7 @@ public class ImageUtils {
                 image.setRGB(x, y, color);
             }
         }
-
+        
         return image;
     }
   

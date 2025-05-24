@@ -1,8 +1,6 @@
 package mg.ando.codage.steganographie.service;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -57,13 +55,13 @@ public class SteganographyServiceImpl implements SteganographyService {
         String binary = huffmanService.encode(message, alphabet);
         Iterator<Integer> iterator = seq.iterator();
         Map<Integer, Integer> pixelsMap = new HashMap<>();
-
+        int pixelIndex = -1;
         for (int i = 0; i < binary.length(); i++) {
             if (!iterator.hasNext()) {
                 throw new RuntimeException("Séquence trop courte pour le message");
             }
 
-            int pixelIndex = iterator.next();
+            pixelIndex = iterator.next();
 
             Integer argb = pixelsMap.getOrDefault(pixelIndex, null);
             int[] channels = extractChannels(argb);
@@ -75,8 +73,8 @@ public class SteganographyServiceImpl implements SteganographyService {
             channels = ImageUtils.updateChannels(channels, newValue);
             pixelsMap.put(pixelIndex, rebuildARGB(channels));
         }
-
-        return ImageUtils.createImageFromMapAutoSize(pixelsMap, seq.getMod());
+        
+        return ImageUtils.createImageFromMapAutoSize(pixelsMap, pixelIndex + 2);
     }
 
 
@@ -118,8 +116,8 @@ public class SteganographyServiceImpl implements SteganographyService {
     }
 
     private void validatePixelIndex(int index, int length) {
-        if (index < 0 || index >= length) {
-            throw new IndexOutOfBoundsException("Index pixel invalide : " + index);
+        if (index < 0 || index > length) {
+            throw new IndexOutOfBoundsException("Index pixel invalide : " + index+ " (doit être entre 0 et " + (length - 1) + ")");
         }
     }
     public static Integer getOrDefault(List<Integer> list, int index, Integer defaultValue) {
