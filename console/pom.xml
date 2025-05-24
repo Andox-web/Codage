@@ -37,6 +37,12 @@
             <artifactId>huffman</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Dépendance vers le module steganographie-->
+        <dependency>
+            <groupId>mg.ando.codage</groupId>
+            <artifactId>steganographie</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- Spring Boot (sans serveur web) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

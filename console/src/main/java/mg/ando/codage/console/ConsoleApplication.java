@@ -1,5 +1,7 @@
 package mg.ando.codage.console;
 
+import java.awt.image.BufferedImage;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,9 +11,12 @@ import org.springframework.context.annotation.ComponentScan;
 import mg.ando.codage.core.model.Alphabet;
 import mg.ando.codage.core.model.BinaryCode;
 import mg.ando.codage.core.model.Character;
+import mg.ando.codage.core.sequence.Sequence;
 import mg.ando.codage.huffman.model.EncodeResponse;
 import mg.ando.codage.huffman.service.HuffmanService;
 import mg.ando.codage.sardinas.service.SardinasService;
+import mg.ando.codage.steganographie.service.SteganographyService;
+import mg.ando.codage.steganographie.util.ImageUtils;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"mg.ando.codage"})
@@ -22,7 +27,8 @@ public class ConsoleApplication {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(SardinasService sardinasService, HuffmanService huffmanService) {
+    public CommandLineRunner commandLineRunner(SardinasService sardinasService, HuffmanService huffmanService,
+                                               SteganographyService steganographyService) {
         return args -> {
             // Test d'unicité de décodage (Sardinas)
             Alphabet testAlphabet = createTestAlphabet();
@@ -32,6 +38,8 @@ public class ConsoleApplication {
             // Test d'encodage/décodage Huffman
             testHuffmanEncodingDecoding(huffmanService);
 
+            // Test de stéganographie
+            testSteganography(steganographyService,huffmanService);
             System.exit(0);
         };
     }
@@ -88,5 +96,35 @@ public class ConsoleApplication {
         alphabet.getCharacters().forEach(c -> 
             System.out.println("→ " + c.getValue() + " : " + c.getCode().getValue()));
         System.out.println("\nDécodage unique ? " + (result ? "OUI ✅" : "NON ❌"));
+    }
+    private void testSteganography(SteganographyService steganoService, HuffmanService huffmanService) {
+        System.out.println("\n=== Test Stéganographie ===");
+        
+        try {
+            // 1. Préparation
+            String secretMessage = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\r\n" ;
+            EncodeResponse encodeResponse =  huffmanService.encode(secretMessage);
+            Alphabet alphabet = encodeResponse.getAlphabet();
+            int length =  encodeResponse.getEncodedString().length();
+            
+            // alphabet.printInfo();
+            
+            Sequence sequence = new Sequence(0, 1, 1, Integer.MAX_VALUE, length*length,0);
+            BufferedImage image = steganoService.encode(secretMessage, alphabet, sequence);
+
+            // 3. Décodage
+            Sequence decodeSequence = new Sequence(0, 1, 1, length,length*length,0);
+            
+            String decoded = steganoService.decode(image, alphabet, decodeSequence);
+            ImageUtils.saveAsPng(image, "image-decoded.png");
+            // 4. Validation
+            System.out.println("Message original: " + secretMessage);
+            System.out.println("Message décodé : " + decoded);
+            System.out.println(secretMessage.equals(decoded) ? "✅ Succès" : "❌ Échec");
+            
+        } catch (Exception e) {
+            System.out.println("Erreur: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

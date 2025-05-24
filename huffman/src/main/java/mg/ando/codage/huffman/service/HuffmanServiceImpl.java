@@ -27,6 +27,16 @@ public class HuffmanServiceImpl implements HuffmanService {
     }
 
     @Override
+    public String encode(String input, Alphabet alphabet) {
+        StringBuilder encoded = new StringBuilder();
+        for (char c : input.toCharArray()) {
+            encoded.append(alphabet.getBinaryCodeByChar(c));
+        }
+        return encoded.toString();
+    }
+
+    
+    @Override
     public String decode(String encodedText, Alphabet alphabet) {
         HuffmanDecoder decoder = new HuffmanDecoder(alphabet);
         return decoder.decode(encodedText);

@@ -34,10 +34,7 @@ public class HuffmanTree {
         for (Map.Entry<java.lang.Character, Integer> entry : frequencyCharMap.entrySet()) {
             frequencyMap.add(new HuffmanNode(entry.getKey(), entry.getValue()));
         }
-        System.out.println("Fréquence des caractères :");
-        for (HuffmanNode node : frequencyMap) {
-            System.out.println(node.getCharacter() + ": " + node.getFrequency());
-        }
+    
         return frequencyMap;
     }
 
