@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class ImageUtils {
@@ -67,33 +68,29 @@ public class ImageUtils {
         // return channels;
     }
     
-    public static BufferedImage createImageFromListAutoSize(List<Integer> originalData,int requiredSize) {
-        
+    public static BufferedImage createImageFromMapAutoSize(Map<Integer, Integer> dataMap, int requiredSize) {
         int width = (int) Math.ceil(Math.sqrt(requiredSize));
         int height = (int) Math.ceil((double) requiredSize / width);
-        
-        // Préparer une nouvelle liste avec complétion si besoin
-        List<Integer> data = new ArrayList<>(originalData);
-        Random random = new Random();
-        if (data.size()>requiredSize) {
-            throw new RuntimeException("Erreur lors de la creation de l'image: la taille requis est trop petite");
-        }
-        while (data.size() < requiredSize) {
-            data.add(null); // on laisse le traitement des nulls plus loin
-        }
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Random random = new Random();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int index = y * width + x;
-                Integer value = data.get(index);
                 int color;
+
+                if (index >= requiredSize) {
+                    // Si on dépasse la taille requise, on arrête le traitement
+                    continue;
+                }
+
+                Integer value = dataMap.get(index);
 
                 if (value != null) {
                     color = value;
                 } else {
-                    int gray = random.nextInt(256); // 0 à 255
+                    int gray = random.nextInt(256);
                     color = (gray << 16) | (gray << 8) | gray;
                 }
 
@@ -102,7 +99,8 @@ public class ImageUtils {
         }
 
         return image;
-    }   
+    }
+  
     public static void saveAsPng(BufferedImage image, String filePath) throws IOException {
         File outputFile = new File(filePath);
         boolean success = ImageIO.write(image, "PNG", outputFile);

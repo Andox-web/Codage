@@ -3,8 +3,10 @@ package mg.ando.codage.steganographie.service;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -54,7 +56,7 @@ public class SteganographyServiceImpl implements SteganographyService {
     public BufferedImage encode(String message, Alphabet alphabet, Sequence seq) {
         String binary = huffmanService.encode(message, alphabet);
         Iterator<Integer> iterator = seq.iterator();
-        List<Integer> pixels = new ArrayList<>(Collections.nCopies(seq.getMod(), null));
+        Map<Integer, Integer> pixelsMap = new HashMap<>();
 
         for (int i = 0; i < binary.length(); i++) {
             if (!iterator.hasNext()) {
@@ -63,19 +65,20 @@ public class SteganographyServiceImpl implements SteganographyService {
 
             int pixelIndex = iterator.next();
 
-            Integer argb = getOrDefault(pixels,pixelIndex,null);
+            Integer argb = pixelsMap.getOrDefault(pixelIndex, null);
             int[] channels = extractChannels(argb);
             int currentValue = ImageUtils.calculateGrayscale(channels);
 
             boolean bit = binary.charAt(i) == '1';
             int newValue = bit ? (currentValue | 1) : (currentValue & ~1);
 
-            // Mise à jour des 3 canaux pour garder le noir et blanc
-            channels =  ImageUtils.updateChannels(channels,newValue);
-            pixels.set(pixelIndex, rebuildARGB(channels));
+            channels = ImageUtils.updateChannels(channels, newValue);
+            pixelsMap.put(pixelIndex, rebuildARGB(channels));
         }
-        return ImageUtils.createImageFromListAutoSize(pixels,seq.getMod());
+
+        return ImageUtils.createImageFromMapAutoSize(pixelsMap, seq.getMod());
     }
+
 
     @Override
     public String decode(BufferedImage img, Alphabet alphabet, Sequence seq) {
