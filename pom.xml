@@ -9,15 +9,15 @@
     <modules>
         <module>core</module>
         <module>sardinas-patterson</module>
-        <module>core</module>
         <module>steganographie</module>
         <module>api-gateway</module>
         <module>console</module>
+        <module>huffman</module>
     </modules>
 
     <properties>
-        <!-- Java LTS 21 (GA 19 septembre 2023) -->
-        <java.version>21</java.version>
+        <!-- Java LTS 17 -->
+        <java.version>17</java.version>
         
         <!-- Spring Boot 3.4.5 (dernier artefact signalé sur Maven Central) -->
         <spring-boot.version>3.4.5</spring-boot.version>
